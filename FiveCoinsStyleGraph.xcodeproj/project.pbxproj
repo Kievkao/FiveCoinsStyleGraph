@@ -13,6 +13,10 @@
 		C52FD5161CAFF09B00C297D6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C52FD5151CAFF09B00C297D6 /* Assets.xcassets */; };
 		C52FD5191CAFF09B00C297D6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C52FD5171CAFF09B00C297D6 /* LaunchScreen.storyboard */; };
 		C52FD5241CAFF09B00C297D6 /* FiveCoinsStyleGraphTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52FD5231CAFF09B00C297D6 /* FiveCoinsStyleGraphTests.swift */; };
+		C52FD5301CAFF28F00C297D6 /* FCSGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52FD52F1CAFF28F00C297D6 /* FCSGraph.swift */; };
+		C52FD5321CAFF53300C297D6 /* FCSGraphCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52FD5311CAFF53300C297D6 /* FCSGraphCollectionViewCell.swift */; };
+		C52FD5351CAFF59D00C297D6 /* IdentifierProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52FD5341CAFF59D00C297D6 /* IdentifierProvider.swift */; };
+		C52FD5371CAFF7A900C297D6 /* FCSGraphCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52FD5361CAFF7A900C297D6 /* FCSGraphCollectionViewFlowLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +40,10 @@
 		C52FD51F1CAFF09B00C297D6 /* FiveCoinsStyleGraphTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FiveCoinsStyleGraphTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C52FD5231CAFF09B00C297D6 /* FiveCoinsStyleGraphTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiveCoinsStyleGraphTests.swift; sourceTree = "<group>"; };
 		C52FD5251CAFF09B00C297D6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C52FD52F1CAFF28F00C297D6 /* FCSGraph.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FCSGraph.swift; sourceTree = "<group>"; };
+		C52FD5311CAFF53300C297D6 /* FCSGraphCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FCSGraphCollectionViewCell.swift; sourceTree = "<group>"; };
+		C52FD5341CAFF59D00C297D6 /* IdentifierProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifierProvider.swift; sourceTree = "<group>"; };
+		C52FD5361CAFF7A900C297D6 /* FCSGraphCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FCSGraphCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +85,8 @@
 		C52FD50D1CAFF09B00C297D6 /* FiveCoinsStyleGraph */ = {
 			isa = PBXGroup;
 			children = (
+				C52FD5331CAFF54D00C297D6 /* Protocols */,
+				C52FD52E1CAFF1E400C297D6 /* FCSGraph */,
 				C52FD50E1CAFF09B00C297D6 /* AppDelegate.swift */,
 				C52FD5101CAFF09B00C297D6 /* ViewController.swift */,
 				C52FD5121CAFF09B00C297D6 /* Main.storyboard */,
@@ -94,6 +104,24 @@
 				C52FD5251CAFF09B00C297D6 /* Info.plist */,
 			);
 			path = FiveCoinsStyleGraphTests;
+			sourceTree = "<group>";
+		};
+		C52FD52E1CAFF1E400C297D6 /* FCSGraph */ = {
+			isa = PBXGroup;
+			children = (
+				C52FD52F1CAFF28F00C297D6 /* FCSGraph.swift */,
+				C52FD5311CAFF53300C297D6 /* FCSGraphCollectionViewCell.swift */,
+				C52FD5361CAFF7A900C297D6 /* FCSGraphCollectionViewFlowLayout.swift */,
+			);
+			path = FCSGraph;
+			sourceTree = "<group>";
+		};
+		C52FD5331CAFF54D00C297D6 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				C52FD5341CAFF59D00C297D6 /* IdentifierProvider.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,6 +168,7 @@
 		C52FD5031CAFF09B00C297D6 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = FCS;
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = kievkao;
@@ -197,8 +226,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C52FD5321CAFF53300C297D6 /* FCSGraphCollectionViewCell.swift in Sources */,
 				C52FD5111CAFF09B00C297D6 /* ViewController.swift in Sources */,
+				C52FD5371CAFF7A900C297D6 /* FCSGraphCollectionViewFlowLayout.swift in Sources */,
+				C52FD5301CAFF28F00C297D6 /* FCSGraph.swift in Sources */,
 				C52FD50F1CAFF09B00C297D6 /* AppDelegate.swift in Sources */,
+				C52FD5351CAFF59D00C297D6 /* IdentifierProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
