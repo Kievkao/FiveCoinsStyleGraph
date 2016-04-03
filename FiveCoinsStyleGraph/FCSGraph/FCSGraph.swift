@@ -10,7 +10,12 @@ import UIKit
 
 class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
+    private let cellWidth: CGFloat = 100.0
+    
     private var collectionView: UICollectionView!
+    
+    private var valueIndicator: UIImageView!
+    private var valueIndicatorTopConstraint: NSLayoutConstraint!
     
     var data: [Float]? {
         didSet {
@@ -31,11 +36,31 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     
     private func setup() {
         self.collectionViewSetup()
+        self.valueIndicatorSetup()
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        //print("s")
+    }
+    
+    private func valueIndicatorSetup() {
+        self.valueIndicator = UIImageView(image: UIImage(named: "sun"))
+        self.valueIndicator.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(self.valueIndicator)
+        
+        let centerXConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
+        
+        self.valueIndicatorTopConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 30)
+        
+        self.addConstraints([centerXConstraint, self.valueIndicatorTopConstraint])
     }
     
     private func collectionViewSetup() {
         
-        self.collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: FCSGraphCollectionViewFlowLayout())
+        let layout = FCSGraphCollectionViewFlowLayout()
+        layout.cellWidth = cellWidth
+        
+        self.collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.collectionView)
         
@@ -63,9 +88,7 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         let cell: FCSGraphCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(FCSGraphCollectionViewCell.identifier(), forIndexPath: indexPath) as! FCSGraphCollectionViewCell
         
         if let graphData = self.data {
-            
             let previous = indexPath.item > 0 ? Float(graphData[indexPath.item - 1]) : Float(0)
-            
             cell.drawDotAtY(graphData[indexPath.item], previous: previous)
         }
         
@@ -73,6 +96,6 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSize(width: 80.0, height: self.bounds.height)
+        return CGSize(width: cellWidth, height: self.bounds.height)
     }
 }
