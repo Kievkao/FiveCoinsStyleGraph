@@ -10,7 +10,13 @@ import UIKit
 
 class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
-    var collectionView: UICollectionView!
+    private var collectionView: UICollectionView!
+    
+    var data: [Float]? {
+        didSet {
+            self.collectionView.reloadData()
+        }
+    }
     
     // MARK: View setup
     override init(frame: CGRect) {
@@ -38,17 +44,28 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[collectionView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views:  viewsDict))
         
         self.collectionView.registerClass(FCSGraphCollectionViewCell.self, forCellWithReuseIdentifier: FCSGraphCollectionViewCell.identifier())
+        self.collectionView.showsHorizontalScrollIndicator = false
+        self.collectionView.backgroundColor = UIColor.clearColor()
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
     }
     
     // MARK: UICollectionViewDataSource, UICollectionViewDelegate
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 25
+        guard let graphData = self.data else {
+            return 0
+        }
+        
+        return graphData.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier(FCSGraphCollectionViewCell.identifier(), forIndexPath: indexPath)
+        let cell: FCSGraphCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(FCSGraphCollectionViewCell.identifier(), forIndexPath: indexPath) as! FCSGraphCollectionViewCell
+        
+        if let graphData = self.data {
+            cell.drawDotAtY(graphData[indexPath.item])
+        }
+        
         return cell
     }
     

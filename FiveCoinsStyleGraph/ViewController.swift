@@ -10,16 +10,22 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    @IBOutlet weak var graph: FCSGraph!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        self.fillGraphWithData()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    
+    func fillGraphWithData() {
+        var values = [Float]()
+        
+        for _ in 0..<25 {
+            values.append(Float(arc4random_uniform(100) + 5))
+        }
+        
+        self.graph.data = values
     }
-
-
 }
 

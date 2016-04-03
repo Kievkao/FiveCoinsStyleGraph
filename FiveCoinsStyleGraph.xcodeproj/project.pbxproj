@@ -423,6 +423,7 @@
 				C52FD52A1CAFF09B00C297D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C52FD52B1CAFF09B00C297D6 /* Build configuration list for PBXNativeTarget "FiveCoinsStyleGraphTests" */ = {
 			isa = XCConfigurationList;
@@ -431,6 +432,7 @@
 				C52FD52D1CAFF09B00C297D6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
