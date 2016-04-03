@@ -23,7 +23,7 @@ class FCSGraphCollectionViewFlowLayout: UICollectionViewFlowLayout {
     func setup() {
         self.scrollDirection = .Horizontal
         self.minimumInteritemSpacing = 0.0
-        self.minimumLineSpacing = 5.0
+        self.minimumLineSpacing = 0.0
     }
     
     override func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {

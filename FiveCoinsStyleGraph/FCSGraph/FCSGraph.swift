@@ -63,7 +63,10 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         let cell: FCSGraphCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(FCSGraphCollectionViewCell.identifier(), forIndexPath: indexPath) as! FCSGraphCollectionViewCell
         
         if let graphData = self.data {
-            cell.drawDotAtY(graphData[indexPath.item])
+            
+            let previous = indexPath.item > 0 ? Float(graphData[indexPath.item - 1]) : Float(0)
+            
+            cell.drawDotAtY(graphData[indexPath.item], previous: previous)
         }
         
         return cell
