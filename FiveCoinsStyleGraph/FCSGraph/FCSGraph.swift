@@ -11,6 +11,7 @@ import UIKit
 class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     private let cellWidth: CGFloat = 100.0
+    private let tmpIconHalfRadius: CGFloat = 8.0
     
     private var collectionView: UICollectionView!
     
@@ -40,7 +41,15 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        //print("s")
+        let centerPoint = CGPointMake(self.collectionView.center.x + self.collectionView.contentOffset.x,
+                                      self.collectionView.center.y + self.collectionView.contentOffset.y)
+        let centerIndexPath = self.collectionView.indexPathForItemAtPoint(centerPoint)
+        
+        if let indexPath = centerIndexPath {
+            
+            let constraintValue = indexPath.item > 0 ? CGFloat(self.data![indexPath.item - 1]) : tmpIconHalfRadius
+            self.valueIndicatorTopConstraint.constant = constraintValue - tmpIconHalfRadius
+        }
     }
     
     private func valueIndicatorSetup() {
