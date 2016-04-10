@@ -8,10 +8,13 @@
 
 import UIKit
 
-let dotDiameter: CGFloat = 5.0
-let dotColor = UIColor.whiteColor().CGColor
-
 class FCSCellDrawView: UIView {
+
+    static let dotDiameter: CGFloat = 5.0
+    static let dotRadius = FCSCellDrawView.dotDiameter/2
+    static let lineWidth: CGFloat = 1.0
+
+    let dotColor = UIColor.whiteColor().CGColor
 
     var dotY: CGFloat?
     var previous: CGFloat?
@@ -42,8 +45,8 @@ class FCSCellDrawView: UIView {
         }
 
         // value dot
-        let dotOrigin = CGPoint(x: self.bounds.size.width - dotDiameter - dotDiameter/2, y: y)
-        let dotSize = CGSize(width: dotDiameter, height: dotDiameter)
+        let dotOrigin = CGPoint(x: self.bounds.size.width - FCSCellDrawView.dotDiameter - FCSCellDrawView.dotRadius, y: y)
+        let dotSize = CGSize(width: FCSCellDrawView.dotDiameter, height: FCSCellDrawView.dotDiameter)
 
         let context = UIGraphicsGetCurrentContext()
 
@@ -53,10 +56,10 @@ class FCSCellDrawView: UIView {
 
         // previous line
         CGContextSetStrokeColorWithColor(UIGraphicsGetCurrentContext(), dotColor)
-        CGContextSetLineWidth(context, 1.0);
+        CGContextSetLineWidth(context, FCSCellDrawView.lineWidth);
 
-        CGContextMoveToPoint(context, dotOrigin.x + dotDiameter/2, dotOrigin.y + dotDiameter/2);
-        CGContextAddLineToPoint(context, 0, prevY + dotDiameter/2);
+        CGContextMoveToPoint(context, dotOrigin.x + FCSCellDrawView.dotRadius, dotOrigin.y + FCSCellDrawView.dotRadius);
+        CGContextAddLineToPoint(context, 0, prevY + FCSCellDrawView.dotRadius);
 
         CGContextStrokePath(context);
     }

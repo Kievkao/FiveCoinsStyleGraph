@@ -25,7 +25,8 @@ class FCSGraphCollectionViewCell: UICollectionViewCell, IdentifierProvider {
     
     private func setup() {
         self.backgroundColor = UIColor.clearColor()
-        self.drawView = FCSCellDrawView(frame: CGRectInset(self.contentView.bounds, -2.5, 0))
+
+        self.drawView = FCSCellDrawView(frame: CGRectInset(self.contentView.bounds, -FCSCellDrawView.dotRadius, 0))
         self.contentView.addSubview(self.drawView)
     }
 
@@ -38,7 +39,4 @@ class FCSGraphCollectionViewCell: UICollectionViewCell, IdentifierProvider {
     func drawDotAtY(y: Float, previous: Float) {
         self.drawView.drawDotAtY(y, previous: previous)
     }
-    
-    
-    
 }

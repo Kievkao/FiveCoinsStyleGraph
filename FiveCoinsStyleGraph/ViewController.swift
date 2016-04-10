@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     func fillGraphWithData() {
         var values = [Float]()
         
-        for index in 0..<25 {
+        for _ in 0..<25 {
             values.append(Float(arc4random_uniform(100) + 5))
 
 //            if index % 2 > 0 {
