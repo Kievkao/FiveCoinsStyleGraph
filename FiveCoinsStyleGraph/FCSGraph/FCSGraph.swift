@@ -10,7 +10,7 @@ import UIKit
 
 class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
-    private let cellWidth: CGFloat = 50.0
+    private let cellWidth: CGFloat = 100.0
     private let tmpIconHalfRadius: CGFloat = 8.0
     
     private var collectionView: UICollectionView!
