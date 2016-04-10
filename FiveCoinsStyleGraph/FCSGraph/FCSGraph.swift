@@ -37,20 +37,52 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     
     private func setup() {
         self.collectionViewSetup()
-        //self.valueIndicatorSetup()
+        self.valueIndicatorSetup()
     }
     
-//    func scrollViewDidScroll(scrollView: UIScrollView) {
-//        let centerPoint = CGPointMake(self.collectionView.center.x + self.collectionView.contentOffset.x,
-//                                      self.collectionView.center.y + self.collectionView.contentOffset.y)
-//        let centerIndexPath = self.collectionView.indexPathForItemAtPoint(centerPoint)
-//        
-//        if let indexPath = centerIndexPath {
-//            
-//            let constraintValue = indexPath.item > 0 ? CGFloat(self.data![indexPath.item - 1]) : tmpIconHalfRadius
-//            self.valueIndicatorTopConstraint.constant = constraintValue - tmpIconHalfRadius
-//        }
-//    }
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        let centerPoint = CGPointMake(self.collectionView.center.x + self.collectionView.contentOffset.x,
+                                      self.collectionView.center.y + self.collectionView.contentOffset.y)
+
+        let centerIndexPath = self.collectionView.indexPathForItemAtPoint(centerPoint)
+        
+        if let indexPath = centerIndexPath {
+            let rightValue = CGFloat(self.data![indexPath.item])
+            let leftValue = indexPath.item > 0 ? CGFloat(self.data![indexPath.item - 1]) : 0
+
+            var min: CGFloat = leftValue
+            var max: CGFloat = 0
+            var iconOffset: CGFloat = 0;
+
+            if rightValue < leftValue {
+                min = rightValue
+                max = leftValue
+                iconOffset = -tmpIconHalfRadius
+            }
+            else {
+                min = leftValue
+                max = rightValue
+                iconOffset = -tmpIconHalfRadius/2
+            }
+
+            var k: CGFloat = 0
+
+            k = (rightValue - leftValue) / cellWidth
+
+            let centerPointInCell = self.collectionView.convertPoint(centerPoint, toView: self.collectionView.cellForItemAtIndexPath(indexPath))
+
+            var y: CGFloat = 0
+
+            if rightValue > leftValue {
+                y = k * centerPointInCell.x + min
+            }
+            else {
+                y = k * centerPointInCell.x + max
+            }
+
+            self.valueIndicatorTopConstraint.constant = y + iconOffset
+        }
+    }
 
     private func valueIndicatorSetup() {
         self.valueIndicator = UIImageView(image: UIImage(named: "sun"))
