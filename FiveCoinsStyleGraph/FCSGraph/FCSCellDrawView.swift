@@ -44,7 +44,6 @@ class FCSCellDrawView: UIView {
             return
         }
 
-        // value dot
         let dotOrigin = CGPoint(x: self.bounds.size.width - FCSCellDrawView.dotDiameter - FCSCellDrawView.dotRadius, y: y)
         let dotSize = CGSize(width: FCSCellDrawView.dotDiameter, height: FCSCellDrawView.dotDiameter)
 

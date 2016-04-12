@@ -37,20 +37,24 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     }
 
     func loadGraphValues(values: [Float]) {
-        self.reloadGraphDataWithValues(values)
-    }
+        self.data = values
 
-    private func reloadGraphDataWithValues(values:[Float]) {
         self.adjustValuesToBounds(values)
-        self.collectionView.reloadData()
-        self.placeValueIndicator()
+
+        // weakself
+        self.collectionView.performBatchUpdates({
+            self.collectionView.reloadData()
+        }) { (success) in
+            self.placeValueIndicator()
+        }
     }
 
     private func adjustValuesToBounds(values: [Float]) {
         let maxValue = Float((values.maxElement())!)
 
         let k = Float(self.bounds.height) / maxValue
-        self.data = values.map{$0 * k}
+        let adjusted = values.map{$0 * k}
+        self.data = adjusted
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
