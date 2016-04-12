@@ -11,19 +11,15 @@ import UIKit
 class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
     private let cellWidth: CGFloat = 100.0
-    private let tmpIconHalfRadius: CGFloat = 8.0
+    private let valueIndicatorDiameter: CGFloat = 16.0
     
     private var collectionView: UICollectionView!
     
     private var valueIndicator: FCSValuePointerView!
     private var valueIndicatorTopConstraint: NSLayoutConstraint!
     
-    var data: [Float]? {
-        didSet {
-            self.collectionView.reloadData()
-        }
-    }
-    
+    private var data: [Float]?
+
     // MARK: View setup
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,68 +30,89 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         super.init(coder: aDecoder)
         self.setup()
     }
-    
+
     private func setup() {
         self.collectionViewSetup()
         self.valueIndicatorSetup()
     }
+
+    func loadGraphValues(values: [Float]) {
+        self.reloadGraphDataWithValues(values)
+    }
+
+    private func reloadGraphDataWithValues(values:[Float]) {
+        self.adjustValuesToBounds(values)
+        self.collectionView.reloadData()
+        self.placeValueIndicator()
+    }
+
+    private func adjustValuesToBounds(values: [Float]) {
+        let maxValue = Float((values.maxElement())!)
+
+        let k = Float(self.bounds.height) / maxValue
+        self.data = values.map{$0 * k}
+    }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
+        self.placeValueIndicator()
+    }
+
+    func placeValueIndicator() {
         let centerPoint = CGPointMake(self.collectionView.center.x + self.collectionView.contentOffset.x,
                                       self.collectionView.center.y + self.collectionView.contentOffset.y)
 
-        let centerIndexPath = self.collectionView.indexPathForItemAtPoint(centerPoint)
-        
-        if let indexPath = centerIndexPath {
-            let rightValue = CGFloat(self.data![indexPath.item])
-            let leftValue = indexPath.item > 0 ? CGFloat(self.data![indexPath.item - 1]) : 0
-
-            var min: CGFloat = leftValue
-            var max: CGFloat = 0
-            var iconOffset: CGFloat = 0;
-
-            if rightValue < leftValue {
-                min = rightValue
-                max = leftValue
-                iconOffset = -tmpIconHalfRadius
-            }
-            else {
-                min = leftValue
-                max = rightValue
-                iconOffset = -tmpIconHalfRadius/2
-            }
-
-            var k: CGFloat = 0
-
-            k = (rightValue - leftValue) / cellWidth
-
-            let centerPointInCell = self.collectionView.convertPoint(centerPoint, toView: self.collectionView.cellForItemAtIndexPath(indexPath))
-
-            var y: CGFloat = 0
-
-            if rightValue > leftValue {
-                y = k * centerPointInCell.x + min
-            }
-            else {
-                y = k * centerPointInCell.x + max
-            }
-
-            self.valueIndicatorTopConstraint.constant = y + iconOffset
+        guard let centerIndexPath = self.collectionView.indexPathForItemAtPoint(centerPoint) else {
+            return
         }
+
+        let rightValue = CGFloat(self.data![centerIndexPath.item])
+        let leftValue = centerIndexPath.item > 0 ? CGFloat(self.data![centerIndexPath.item - 1]) : 0
+
+        var min: CGFloat = leftValue
+        var max: CGFloat = 0
+        var iconOffset: CGFloat = 0;
+
+        if rightValue < leftValue {
+            min = rightValue
+            max = leftValue
+            iconOffset = -valueIndicatorDiameter/2
+        }
+        else {
+            min = leftValue
+            max = rightValue
+            iconOffset = -valueIndicatorDiameter/4
+        }
+
+        var k: CGFloat = 0
+
+        k = (rightValue - leftValue) / cellWidth
+
+        let centerPointInCell = self.collectionView.convertPoint(centerPoint, toView: self.collectionView.cellForItemAtIndexPath(centerIndexPath))
+
+        var y: CGFloat = 0
+
+        if rightValue > leftValue {
+            y = k * centerPointInCell.x + min
+        }
+        else {
+            y = k * centerPointInCell.x + max
+        }
+        
+        self.valueIndicatorTopConstraint.constant = y + iconOffset
     }
 
     private func valueIndicatorSetup() {
-        self.valueIndicator = FCSValuePointerView(frame: CGRectMake(0, 0, 16, 16))
+        self.valueIndicator = FCSValuePointerView(frame: CGRectMake(0, 0, valueIndicatorDiameter, valueIndicatorDiameter))
         self.valueIndicator.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.valueIndicator)
         
         let centerXConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
 
-        let widthConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .Width, multiplier: 1.0, constant: 16)
+        let widthConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .Width, multiplier: 1.0, constant: valueIndicatorDiameter)
 
-        let heightConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: 16)
+        let heightConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: valueIndicatorDiameter)
 
-        self.valueIndicatorTopConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 30)
+        self.valueIndicatorTopConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 0)
         
         self.addConstraints([centerXConstraint, self.valueIndicatorTopConstraint, widthConstraint, heightConstraint])
     }

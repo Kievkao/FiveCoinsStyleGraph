@@ -32,7 +32,7 @@ class ViewController: UIViewController {
 //            }
         }
         
-        self.graph.data = values
+        self.graph.loadGraphValues(values)
     }
 }
 
