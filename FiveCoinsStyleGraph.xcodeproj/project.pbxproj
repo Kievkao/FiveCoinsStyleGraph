@@ -18,6 +18,7 @@
 		C52FD5351CAFF59D00C297D6 /* IdentifierProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52FD5341CAFF59D00C297D6 /* IdentifierProvider.swift */; };
 		C52FD5371CAFF7A900C297D6 /* FCSGraphCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52FD5361CAFF7A900C297D6 /* FCSGraphCollectionViewFlowLayout.swift */; };
 		C5B2EEA81CBA7BF9003F1337 /* FCSCellDrawView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5B2EEA71CBA7BF9003F1337 /* FCSCellDrawView.swift */; };
+		C5BBABDB1CBCCE300073AB1F /* FCSValuePointerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5BBABDA1CBCCE300073AB1F /* FCSValuePointerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		C52FD5341CAFF59D00C297D6 /* IdentifierProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IdentifierProvider.swift; sourceTree = "<group>"; };
 		C52FD5361CAFF7A900C297D6 /* FCSGraphCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FCSGraphCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		C5B2EEA71CBA7BF9003F1337 /* FCSCellDrawView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FCSCellDrawView.swift; sourceTree = "<group>"; };
+		C5BBABDA1CBCCE300073AB1F /* FCSValuePointerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FCSValuePointerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 				C52FD5311CAFF53300C297D6 /* FCSGraphCollectionViewCell.swift */,
 				C52FD5361CAFF7A900C297D6 /* FCSGraphCollectionViewFlowLayout.swift */,
 				C5B2EEA71CBA7BF9003F1337 /* FCSCellDrawView.swift */,
+				C5BBABDA1CBCCE300073AB1F /* FCSValuePointerView.swift */,
 			);
 			path = FCSGraph;
 			sourceTree = "<group>";
@@ -230,6 +233,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C5B2EEA81CBA7BF9003F1337 /* FCSCellDrawView.swift in Sources */,
+				C5BBABDB1CBCCE300073AB1F /* FCSValuePointerView.swift in Sources */,
 				C52FD5321CAFF53300C297D6 /* FCSGraphCollectionViewCell.swift in Sources */,
 				C52FD5111CAFF09B00C297D6 /* ViewController.swift in Sources */,
 				C52FD5371CAFF7A900C297D6 /* FCSGraphCollectionViewFlowLayout.swift in Sources */,

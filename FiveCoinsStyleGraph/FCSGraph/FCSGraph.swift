@@ -15,7 +15,7 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     
     private var collectionView: UICollectionView!
     
-    private var valueIndicator: UIImageView!
+    private var valueIndicator: FCSValuePointerView!
     private var valueIndicatorTopConstraint: NSLayoutConstraint!
     
     var data: [Float]? {
@@ -85,15 +85,19 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     }
 
     private func valueIndicatorSetup() {
-        self.valueIndicator = UIImageView(image: UIImage(named: "sun"))
+        self.valueIndicator = FCSValuePointerView(frame: CGRectMake(0, 0, 16, 16))
         self.valueIndicator.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.valueIndicator)
         
         let centerXConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
-        
+
+        let widthConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .Width, multiplier: 1.0, constant: 16)
+
+        let heightConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: 16)
+
         self.valueIndicatorTopConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 30)
         
-        self.addConstraints([centerXConstraint, self.valueIndicatorTopConstraint])
+        self.addConstraints([centerXConstraint, self.valueIndicatorTopConstraint, widthConstraint, heightConstraint])
     }
     
     private func collectionViewSetup() {
