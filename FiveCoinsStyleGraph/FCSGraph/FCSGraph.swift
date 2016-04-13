@@ -86,27 +86,28 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
             return
         }
 
+        let centerPointInCell = self.collectionView.convertPoint(centerPoint, toView: self.collectionView.cellForItemAtIndexPath(centerIndexPath))
+
         let rightValue = CGFloat(self.data![centerIndexPath.item])
         let leftValue = centerIndexPath.item > 0 ? CGFloat(self.data![centerIndexPath.item - 1]) : CGFloat(self.data![0])
 
         var min: CGFloat = leftValue
         var max: CGFloat = 0
 
+        var valueIndicatorOffset: CGFloat = 0;
+
         if rightValue < leftValue {
             min = rightValue
             max = leftValue
+            valueIndicatorOffset = -valueIndicatorDiameter/2
         }
         else {
             min = leftValue
             max = rightValue
+            valueIndicatorOffset = -valueIndicatorDiameter/2
         }
 
-        var k: CGFloat = 0
-
-        k = (rightValue - leftValue) / cellWidth
-
-        let centerPointInCell = self.collectionView.convertPoint(centerPoint, toView: self.collectionView.cellForItemAtIndexPath(centerIndexPath))
-
+        let k: CGFloat = (rightValue - leftValue) / cellWidth
         var y: CGFloat = 0
 
         if rightValue > leftValue {
@@ -116,7 +117,7 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
             y = k * centerPointInCell.x + max
         }
 
-        self.valueIndicatorTopConstraint.constant = y
+        self.valueIndicatorTopConstraint.constant = y + valueIndicatorOffset
     }
 
     private func valueIndicatorSetup() {
@@ -124,7 +125,7 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         self.valueIndicator.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.valueIndicator)
         
-        let centerXConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0)
+        let centerXConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: -FCSCellDrawView.dotRadius)
 
         let widthConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .Width, multiplier: 1.0, constant: valueIndicatorDiameter)
 
