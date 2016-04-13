@@ -12,6 +12,8 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
 
     private let cellWidth: CGFloat = 100.0
     private let valueIndicatorDiameter: CGFloat = 16.0
+
+    private var graphViewHeight: CGFloat = 0;
     
     private var collectionView: UICollectionView!
     
@@ -38,8 +40,31 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
 
     func loadGraphValues(values: [Float]) {
         self.data = values
+        self.collectionView.reloadData()
+    }
 
-        self.adjustValuesToBounds(values)
+    private func adjustValues(values: [Float]) {
+        let maxValue = Float((values.maxElement())!)
+
+        let k = Float(self.bounds.height) / maxValue
+        let adjusted = values.map{(maxValue - $0) * k}
+        self.data = adjusted
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        guard let _data = self.data else {
+            return
+        }
+
+        guard self.graphViewHeight != self.bounds.height else {
+            return
+        }
+
+        self.graphViewHeight = self.bounds.height;
+
+        self.adjustValues(_data)
 
         // weakself
         self.collectionView.performBatchUpdates({
@@ -49,14 +74,6 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         }
     }
 
-    private func adjustValuesToBounds(values: [Float]) {
-        let maxValue = Float((values.maxElement())!)
-
-        let k = Float(self.bounds.height) / maxValue
-        let adjusted = values.map{$0 * k}
-        self.data = adjusted
-    }
-    
     func scrollViewDidScroll(scrollView: UIScrollView) {
         self.placeValueIndicator()
     }
@@ -70,21 +87,18 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         }
 
         let rightValue = CGFloat(self.data![centerIndexPath.item])
-        let leftValue = centerIndexPath.item > 0 ? CGFloat(self.data![centerIndexPath.item - 1]) : 0
+        let leftValue = centerIndexPath.item > 0 ? CGFloat(self.data![centerIndexPath.item - 1]) : CGFloat(self.data![0])
 
         var min: CGFloat = leftValue
         var max: CGFloat = 0
-        var iconOffset: CGFloat = 0;
 
         if rightValue < leftValue {
             min = rightValue
             max = leftValue
-            iconOffset = -valueIndicatorDiameter/2
         }
         else {
             min = leftValue
             max = rightValue
-            iconOffset = -valueIndicatorDiameter/4
         }
 
         var k: CGFloat = 0
@@ -101,8 +115,8 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         else {
             y = k * centerPointInCell.x + max
         }
-        
-        self.valueIndicatorTopConstraint.constant = y + iconOffset
+
+        self.valueIndicatorTopConstraint.constant = y
     }
 
     private func valueIndicatorSetup() {
@@ -110,7 +124,7 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         self.valueIndicator.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.valueIndicator)
         
-        let centerXConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0.0)
+        let centerXConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: 0)
 
         let widthConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .Width, multiplier: 1.0, constant: valueIndicatorDiameter)
 
@@ -154,7 +168,7 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         let cell: FCSGraphCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(FCSGraphCollectionViewCell.identifier(), forIndexPath: indexPath) as! FCSGraphCollectionViewCell
         
         if let graphData = self.data {
-            let previous = indexPath.item > 0 ? Float(graphData[indexPath.item - 1]) : Float(0)
+            let previous = indexPath.item > 0 ? Float(graphData[indexPath.item - 1]) : Float(graphData[0])
             cell.drawDotAtY(graphData[indexPath.item], previous: previous)
         }
         
@@ -162,6 +176,6 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
-        return CGSize(width: cellWidth, height: self.bounds.height)
+        return CGSize(width: cellWidth, height: collectionView.bounds.height)
     }
 }

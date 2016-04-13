@@ -30,7 +30,7 @@ class FCSGraphCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
     override func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
         let cvBounds = self.collectionView!.bounds
-        let halfWidth = cvBounds.size.width * 0.5 + cellWidth/2
+        let halfWidth = cvBounds.size.width/2 + cellWidth/2
         let proposedContentOffsetCenterX = proposedContentOffset.x + halfWidth
         
         if let attributesForVisibleCells = self.layoutAttributesForElementsInRect(cvBounds) as [UICollectionViewLayoutAttributes]? {
@@ -58,7 +58,6 @@ class FCSGraphCollectionViewFlowLayout: UICollectionViewFlowLayout {
             }
             
             return CGPoint(x: round(candidateAttributes!.center.x - halfWidth), y: proposedContentOffset.y)
-            
         }
         else {
             return super.targetContentOffsetForProposedContentOffset(proposedContentOffset, withScrollingVelocity: velocity)
