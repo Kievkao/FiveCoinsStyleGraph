@@ -48,15 +48,14 @@ class FCSGraphCollectionViewFlowLayout: UICollectionViewFlowLayout {
                     let b = candAttrs.center.x - proposedContentOffsetCenterX
                     
                     if fabsf(Float(a)) < fabsf(Float(b)) {
-                        candidateAttributes = attributes;
+                        candidateAttributes = attributes
                     }
                 }
                 else { // == First time in the loop == //
-                    candidateAttributes = attributes;
+                    candidateAttributes = attributes
                     continue;
                 }
             }
-            
             return CGPoint(x: round(candidateAttributes!.center.x - halfWidth), y: proposedContentOffset.y)
         }
         else {

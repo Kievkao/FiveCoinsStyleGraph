@@ -13,14 +13,13 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     private let cellWidth: CGFloat = 100.0
     private let valueIndicatorDiameter: CGFloat = 16.0
 
-    private var graphViewHeight: CGFloat = 0;
-    
     private var collectionView: UICollectionView!
     
     private var valueIndicator: FCSValuePointerView!
     private var valueIndicatorTopConstraint: NSLayoutConstraint!
     
-    private var data: [Float]?
+    private var originalData: [Float]?
+    private var adjustedData: [Float]?
 
     // MARK: View setup
     override init(frame: CGRect) {
@@ -39,39 +38,28 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     }
 
     func loadGraphValues(values: [Float]) {
-        self.data = values
-        self.collectionView.reloadData()
+        self.originalData = values
+        self.adjustValues()
+
+        self.collectionView.performBatchUpdates({ 
+            self.collectionView.reloadData()
+            }) { (success) in
+                let neededInitialOffset = (self.collectionView.collectionViewLayout as! FCSGraphCollectionViewFlowLayout).targetContentOffsetForProposedContentOffset(self.collectionView.contentOffset, withScrollingVelocity: CGPointZero)
+                self.collectionView.setContentOffset(neededInitialOffset, animated: true)
+
+                self.placeValueIndicator()
+        }
     }
 
-    private func adjustValues(values: [Float]) {
-        let maxValue = Float((values.maxElement())!)
+    private func adjustValues() {
+        guard let data = self.originalData else {
+            return
+        }
+
+        let maxValue = Float((data.maxElement())!)
 
         let k = Float(self.bounds.height) / maxValue
-        let adjusted = values.map{(maxValue - $0) * k}
-        self.data = adjusted
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        guard let _data = self.data else {
-            return
-        }
-
-        guard self.graphViewHeight != self.bounds.height else {
-            return
-        }
-
-        self.graphViewHeight = self.bounds.height;
-
-        self.adjustValues(_data)
-
-        // weakself
-        self.collectionView.performBatchUpdates({
-            self.collectionView.reloadData()
-        }) { (success) in
-            self.placeValueIndicator()
-        }
+        self.adjustedData = data.map{(maxValue - $0) * k}
     }
 
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -88,8 +76,8 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
 
         let centerPointInCell = self.collectionView.convertPoint(centerPoint, toView: self.collectionView.cellForItemAtIndexPath(centerIndexPath))
 
-        let rightValue = CGFloat(self.data![centerIndexPath.item])
-        let leftValue = centerIndexPath.item > 0 ? CGFloat(self.data![centerIndexPath.item - 1]) : CGFloat(self.data![0])
+        let rightValue = CGFloat(self.adjustedData![centerIndexPath.item])
+        let leftValue = centerIndexPath.item > 0 ? CGFloat(self.adjustedData![centerIndexPath.item - 1]) : CGFloat(self.adjustedData![0])
 
         var min: CGFloat = leftValue
         var max: CGFloat = 0
@@ -158,7 +146,7 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     
     // MARK: UICollectionViewDataSource, UICollectionViewDelegate
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        guard let graphData = self.data else {
+        guard let graphData = self.adjustedData else {
             return 0
         }
         
@@ -168,7 +156,7 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell: FCSGraphCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(FCSGraphCollectionViewCell.identifier(), forIndexPath: indexPath) as! FCSGraphCollectionViewCell
         
-        if let graphData = self.data {
+        if let graphData = self.adjustedData {
             let previous = indexPath.item > 0 ? Float(graphData[indexPath.item - 1]) : Float(graphData[0])
             cell.drawDotAtY(graphData[indexPath.item], previous: previous)
         }
