@@ -10,7 +10,7 @@ import UIKit
 
 class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
 
-    private let cellWidth: CGFloat = 100.0
+    private let cellWidth: CGFloat = 50.0
     private let valueIndicatorDiameter: CGFloat = 16.0
 
     private var collectionView: UICollectionView!
@@ -82,30 +82,22 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         var min: CGFloat = leftValue
         var max: CGFloat = 0
 
-        var valueIndicatorOffset: CGFloat = 0;
-
         if rightValue < leftValue {
             min = rightValue
             max = leftValue
-            valueIndicatorOffset = -valueIndicatorDiameter/2
         }
         else {
             min = leftValue
             max = rightValue
-            valueIndicatorOffset = -valueIndicatorDiameter/2
         }
 
         let k: CGFloat = (rightValue - leftValue) / cellWidth
-        var y: CGFloat = 0
+        let valueIndicatorOffset: CGFloat = -valueIndicatorDiameter/2;
 
-        if rightValue > leftValue {
-            y = k * centerPointInCell.x + min
-        }
-        else {
-            y = k * centerPointInCell.x + max
-        }
+        var y: CGFloat = k * centerPointInCell.x + valueIndicatorOffset
+        y = (rightValue > leftValue) ? y + min : y + max
 
-        self.valueIndicatorTopConstraint.constant = y + valueIndicatorOffset
+        self.valueIndicatorTopConstraint.constant = y
     }
 
     private func valueIndicatorSetup() {
@@ -149,14 +141,13 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         guard let graphData = self.adjustedData else {
             return 0
         }
-        
         return graphData.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell: FCSGraphCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(FCSGraphCollectionViewCell.identifier(), forIndexPath: indexPath) as! FCSGraphCollectionViewCell
         
-        if let graphData = self.adjustedData {
+        if let graphData = self.adjustedData where graphData.count > 0 {
             let previous = indexPath.item > 0 ? Float(graphData[indexPath.item - 1]) : Float(graphData[0])
             cell.drawDotAtY(graphData[indexPath.item], previous: previous)
         }
