@@ -38,7 +38,7 @@ class FCSGraphCollectionViewFlowLayout: UICollectionViewFlowLayout {
             var candidateAttributes : UICollectionViewLayoutAttributes?
             for attributes in attributesForVisibleCells {
                 
-                // == Skip comparison with non-cell items (headers and footers) == //
+                // Skip comparison with non-cell items (headers and footers)
                 if attributes.representedElementCategory != UICollectionElementCategory.Cell {
                     continue
                 }
@@ -51,7 +51,7 @@ class FCSGraphCollectionViewFlowLayout: UICollectionViewFlowLayout {
                         candidateAttributes = attributes
                     }
                 }
-                else { // == First time in the loop == //
+                else { // First time in the loop
                     candidateAttributes = attributes
                     continue;
                 }

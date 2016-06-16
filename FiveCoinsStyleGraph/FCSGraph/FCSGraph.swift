@@ -22,6 +22,7 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     private var adjustedData: [Float]?
 
     // MARK: View setup
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
@@ -137,6 +138,7 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     }
     
     // MARK: UICollectionViewDataSource, UICollectionViewDelegate
+
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let graphData = self.adjustedData else {
             return 0

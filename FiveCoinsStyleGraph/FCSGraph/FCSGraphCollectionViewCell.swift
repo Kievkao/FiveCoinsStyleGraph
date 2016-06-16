@@ -13,6 +13,7 @@ class FCSGraphCollectionViewCell: UICollectionViewCell, IdentifierProvider {
     var drawView: FCSCellDrawView!
 
     // MARK: View setup
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
@@ -31,11 +32,13 @@ class FCSGraphCollectionViewCell: UICollectionViewCell, IdentifierProvider {
     }
 
     // MARK: IdentifierProvider protocol
+
     static func identifier() -> String {
         return "fcsGraphValueCellIdentifier"
     }
     
     // MARK: Drawing
+
     func drawDotAtY(y: Float, previous: Float) {
         self.drawView.drawDotAtY(y, previous: previous)
     }

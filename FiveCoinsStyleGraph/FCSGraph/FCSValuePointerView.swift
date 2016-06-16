@@ -13,6 +13,7 @@ class FCSValuePointerView: UIView {
     let circleLayer = CAShapeLayer()
 
     // MARK: View setup
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()

@@ -11,6 +11,9 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var graph: FCSGraph!
+
+    let NumValues = 100
+    let MaxRandomValue: UInt32 = 100
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,8 +24,8 @@ class ViewController: UIViewController {
     func fillGraphWithData() {
         var values = [Float]()
         
-        for _ in 0..<100 {
-            values.append(Float(arc4random_uniform(100)))
+        for _ in 0..<NumValues {
+            values.append(Float(arc4random_uniform(MaxRandomValue)))
         }
         
         self.graph.loadGraphValues(values)
