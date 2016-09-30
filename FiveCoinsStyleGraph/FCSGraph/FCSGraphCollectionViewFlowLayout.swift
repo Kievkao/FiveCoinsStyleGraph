@@ -23,23 +23,23 @@ class FCSGraphCollectionViewFlowLayout: UICollectionViewFlowLayout {
     }
     
     func setup() {
-        self.scrollDirection = .Horizontal
+        self.scrollDirection = .horizontal
         self.minimumInteritemSpacing = 0.0
         self.minimumLineSpacing = 0.0
     }
     
-    override func targetContentOffsetForProposedContentOffset(proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
+    override func targetContentOffset(forProposedContentOffset proposedContentOffset: CGPoint, withScrollingVelocity velocity: CGPoint) -> CGPoint {
         let cvBounds = self.collectionView!.bounds
         let halfWidth = cvBounds.size.width/2 + cellWidth/2
         let proposedContentOffsetCenterX = proposedContentOffset.x + halfWidth
         
-        if let attributesForVisibleCells = self.layoutAttributesForElementsInRect(cvBounds) as [UICollectionViewLayoutAttributes]? {
+        if let attributesForVisibleCells = self.layoutAttributesForElements(in: cvBounds) as [UICollectionViewLayoutAttributes]? {
             
             var candidateAttributes : UICollectionViewLayoutAttributes?
             for attributes in attributesForVisibleCells {
                 
                 // Skip comparison with non-cell items (headers and footers)
-                if attributes.representedElementCategory != UICollectionElementCategory.Cell {
+                if attributes.representedElementCategory != UICollectionElementCategory.cell {
                     continue
                 }
                 
@@ -59,7 +59,7 @@ class FCSGraphCollectionViewFlowLayout: UICollectionViewFlowLayout {
             return CGPoint(x: round(candidateAttributes!.center.x - halfWidth), y: proposedContentOffset.y)
         }
         else {
-            return super.targetContentOffsetForProposedContentOffset(proposedContentOffset, withScrollingVelocity: velocity)
+            return super.targetContentOffset(forProposedContentOffset: proposedContentOffset, withScrollingVelocity: velocity)
         }
     }
 }

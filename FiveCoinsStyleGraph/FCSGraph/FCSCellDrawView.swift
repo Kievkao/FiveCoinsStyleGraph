@@ -14,7 +14,7 @@ class FCSCellDrawView: UIView {
     static let dotRadius = FCSCellDrawView.dotDiameter/2
     static let lineWidth: CGFloat = 1.0
 
-    let dotColor = UIColor.whiteColor().CGColor
+    let dotColor = UIColor.white.cgColor
 
     var dotY: CGFloat?
     var previous: CGFloat?
@@ -30,7 +30,7 @@ class FCSCellDrawView: UIView {
     }
 
     private func setup() {
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
     }
 
     func drawDotAtY(y: Float, previous: Float) {
@@ -39,27 +39,27 @@ class FCSCellDrawView: UIView {
         self.setNeedsDisplay()
     }
 
-    override func drawRect(rect: CGRect) {
-        guard let y = self.dotY, prevY = previous else {
+    override func draw(_ rect: CGRect) {
+        guard let y = self.dotY, let prevY = previous else {
             return
         }
 
         let dotOrigin = CGPoint(x: self.bounds.size.width - FCSCellDrawView.dotDiameter - FCSCellDrawView.dotRadius, y: y)
         let dotSize = CGSize(width: FCSCellDrawView.dotDiameter, height: FCSCellDrawView.dotDiameter)
 
-        let context = UIGraphicsGetCurrentContext()
+        guard let context = UIGraphicsGetCurrentContext() else { return }
 
-        CGContextSetFillColorWithColor(context, dotColor);
-        CGContextSetAlpha(context, 1);
-        CGContextFillEllipseInRect(context, CGRectMake(dotOrigin.x, dotOrigin.y, dotSize.width, dotSize.height));
+        context.setFillColor(dotColor);
+        context.setAlpha(1);
+        context.fillEllipse(in: CGRect(origin: CGPoint(x: dotOrigin.x, y: dotOrigin.y), size: CGSize(width: dotSize.width, height:dotSize.height)));
 
         // previous line
-        CGContextSetStrokeColorWithColor(UIGraphicsGetCurrentContext(), dotColor)
-        CGContextSetLineWidth(context, FCSCellDrawView.lineWidth);
+        UIGraphicsGetCurrentContext()!.setStrokeColor(dotColor)
+        context.setLineWidth(FCSCellDrawView.lineWidth);
 
-        CGContextMoveToPoint(context, dotOrigin.x + FCSCellDrawView.dotRadius, dotOrigin.y + FCSCellDrawView.dotRadius);
-        CGContextAddLineToPoint(context, 0, prevY + FCSCellDrawView.dotRadius);
+        context.move(to: CGPoint(x: dotOrigin.x + FCSCellDrawView.dotRadius, y: dotOrigin.y + FCSCellDrawView.dotRadius))
+        context.addLine(to: CGPoint(x: 0, y: prevY + FCSCellDrawView.dotRadius))
 
-        CGContextStrokePath(context);
+        context.strokePath();
     }
 }

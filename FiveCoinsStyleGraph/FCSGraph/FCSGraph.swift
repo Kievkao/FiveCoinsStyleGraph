@@ -45,7 +45,7 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         self.collectionView.performBatchUpdates({ 
             self.collectionView.reloadData()
             }) { (success) in
-                let neededInitialOffset = (self.collectionView.collectionViewLayout as! FCSGraphCollectionViewFlowLayout).targetContentOffsetForProposedContentOffset(self.collectionView.contentOffset, withScrollingVelocity: CGPointZero)
+                let neededInitialOffset = (self.collectionView.collectionViewLayout as! FCSGraphCollectionViewFlowLayout).targetContentOffset(forProposedContentOffset: self.collectionView.contentOffset, withScrollingVelocity: CGPoint.zero)
                 self.collectionView.setContentOffset(neededInitialOffset, animated: true)
 
                 self.placeValueIndicator()
@@ -57,25 +57,25 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
             return
         }
 
-        let maxValue = Float((data.maxElement())!)
+        let maxValue = Float((data.max())!)
 
         let k = Float(self.bounds.height) / maxValue
         self.adjustedData = data.map{(maxValue - $0) * k}
     }
 
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         self.placeValueIndicator()
     }
 
     func placeValueIndicator() {
-        let centerPoint = CGPointMake(self.collectionView.center.x + self.collectionView.contentOffset.x,
-                                      self.collectionView.center.y + self.collectionView.contentOffset.y)
+        let centerPoint = CGPoint(x: self.collectionView.center.x + self.collectionView.contentOffset.x,
+                                  y: self.collectionView.center.y + self.collectionView.contentOffset.y)
 
-        guard let centerIndexPath = self.collectionView.indexPathForItemAtPoint(centerPoint) else {
+        guard let centerIndexPath = self.collectionView.indexPathForItem(at: centerPoint) else {
             return
         }
 
-        let centerPointInCell = self.collectionView.convertPoint(centerPoint, toView: self.collectionView.cellForItemAtIndexPath(centerIndexPath))
+        let centerPointInCell = self.collectionView.convert(centerPoint, to: self.collectionView.cellForItem(at: centerIndexPath))
 
         let rightValue = CGFloat(self.adjustedData![centerIndexPath.item])
         let leftValue = centerIndexPath.item > 0 ? CGFloat(self.adjustedData![centerIndexPath.item - 1]) : CGFloat(self.adjustedData![0])
@@ -102,17 +102,17 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
     }
 
     private func valueIndicatorSetup() {
-        self.valueIndicator = FCSValuePointerView(frame: CGRectMake(0, 0, valueIndicatorDiameter, valueIndicatorDiameter))
+        self.valueIndicator = FCSValuePointerView(frame: CGRect(origin: CGPoint.zero, size: CGSize(width: valueIndicatorDiameter, height: valueIndicatorDiameter)))
         self.valueIndicator.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.valueIndicator)
         
-        let centerXConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .CenterX, relatedBy: .Equal, toItem: self, attribute: .CenterX, multiplier: 1.0, constant: -FCSCellDrawView.dotRadius)
+        let centerXConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1.0, constant: -FCSCellDrawView.dotRadius)
 
-        let widthConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Width, relatedBy: .Equal, toItem: nil, attribute: .Width, multiplier: 1.0, constant: valueIndicatorDiameter)
+        let widthConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1.0, constant: valueIndicatorDiameter)
 
-        let heightConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .Height, multiplier: 1.0, constant: valueIndicatorDiameter)
+        let heightConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1.0, constant: valueIndicatorDiameter)
 
-        self.valueIndicatorTopConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .Top, relatedBy: .Equal, toItem: self, attribute: .Top, multiplier: 1.0, constant: 0)
+        self.valueIndicatorTopConstraint = NSLayoutConstraint(item: self.valueIndicator, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 0)
         
         self.addConstraints([centerXConstraint, self.valueIndicatorTopConstraint, widthConstraint, heightConstraint])
     }
@@ -122,42 +122,42 @@ class FCSGraph: UIView, UICollectionViewDataSource, UICollectionViewDelegate, UI
         let layout = FCSGraphCollectionViewFlowLayout()
         layout.cellWidth = cellWidth
         
-        self.collectionView = UICollectionView(frame: CGRectZero, collectionViewLayout: layout)
+        self.collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
         self.collectionView.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(self.collectionView)
         
-        let viewsDict = ["collectionView" :collectionView]
-        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|[collectionView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDict))
-        self.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("V:|[collectionView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views:  viewsDict))
+        let viewsDict: [String: UIView] = ["collectionView" :collectionView]
+        self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[collectionView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views: viewsDict))
+        self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[collectionView]|", options: NSLayoutFormatOptions(rawValue: 0), metrics: nil, views:  viewsDict))
         
-        self.collectionView.registerClass(FCSGraphCollectionViewCell.self, forCellWithReuseIdentifier: FCSGraphCollectionViewCell.identifier())
+        self.collectionView.register(FCSGraphCollectionViewCell.self, forCellWithReuseIdentifier: FCSGraphCollectionViewCell.identifier())
         self.collectionView.showsHorizontalScrollIndicator = false
-        self.collectionView.backgroundColor = UIColor.clearColor()
+        self.collectionView.backgroundColor = UIColor.clear
         self.collectionView.dataSource = self
         self.collectionView.delegate = self
     }
     
     // MARK: UICollectionViewDataSource, UICollectionViewDelegate
 
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         guard let graphData = self.adjustedData else {
             return 0
         }
         return graphData.count
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        let cell: FCSGraphCollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier(FCSGraphCollectionViewCell.identifier(), forIndexPath: indexPath) as! FCSGraphCollectionViewCell
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell: FCSGraphCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: FCSGraphCollectionViewCell.identifier(), for: indexPath) as! FCSGraphCollectionViewCell
         
-        if let graphData = self.adjustedData where graphData.count > 0 {
+        if let graphData = self.adjustedData , graphData.count > 0 {
             let previous = indexPath.item > 0 ? Float(graphData[indexPath.item - 1]) : Float(graphData[0])
-            cell.drawDotAtY(graphData[indexPath.item], previous: previous)
+            cell.drawDotAtY(y: graphData[indexPath.item], previous: previous)
         }
         
         return cell
     }
     
-    func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: NSIndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: cellWidth, height: collectionView.bounds.height)
     }
 }

@@ -28,7 +28,7 @@ class ViewController: UIViewController {
             values.append(Float(arc4random_uniform(MaxRandomValue)))
         }
         
-        self.graph.loadGraphValues(values)
+        self.graph.loadGraphValues(values: values)
     }
 }
 

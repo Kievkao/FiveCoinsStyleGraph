@@ -25,16 +25,16 @@ class FCSValuePointerView: UIView {
     }
 
     private func setup() {
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
 
-        let path = UIBezierPath(ovalInRect: self.bounds)
+        let path = UIBezierPath(ovalIn: self.bounds)
         self.circleLayer.frame = self.bounds
-        self.circleLayer.path = path.CGPath
-        self.circleLayer.strokeColor = UIColor.whiteColor().CGColor
-        self.circleLayer.fillColor = UIColor.clearColor().CGColor
+        self.circleLayer.path = path.cgPath
+        self.circleLayer.strokeColor = UIColor.white.cgColor
+        self.circleLayer.fillColor = UIColor.clear.cgColor
         self.circleLayer.lineDashPattern = [5]
         self.circleLayer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        self.circleLayer.addAnimation(self.spinAnimation(), forKey: "rotationAnimation")
+        self.circleLayer.add(self.spinAnimation(), forKey: "rotationAnimation")
 
         self.layer.addSublayer(self.circleLayer)
     }
